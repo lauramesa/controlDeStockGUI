@@ -1,4 +1,4 @@
-package com.alura.jdbc.pruebas;
+package com.control.stock.pruebas;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

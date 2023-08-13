@@ -1,4 +1,6 @@
-package com.alura.jdbc.controller;
+package com.control.stock.controller;
+
+import com.control.stock.factory.ConnectionFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -17,12 +19,10 @@ public class ProductoController {
 	}
 
 	public List<Map<String, String>> listar() {
-		String url = "jdbc:mysql://localhost/control_stock?useTimeZone=true&serverTimeZone=UTC";
-		String user = "root";
-		String password = "root12345";
 
 		ArrayList<Map<String, String>> resultado = null;
-		try (Connection con = DriverManager.getConnection(url, user, password)) {
+
+		try (Connection con = new ConnectionFactory().recuperaConexion();) {
 			Statement statement = con.createStatement();
 			statement.execute("SELECT ID, NOMBRE, DESCRIPCION, CANTIDAD FROM PRODUCTO");
 

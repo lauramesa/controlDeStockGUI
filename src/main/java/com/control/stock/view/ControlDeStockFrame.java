@@ -1,10 +1,9 @@
-package com.alura.jdbc.view;
+package com.control.stock.view;
 
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLException;
 import java.util.Optional;
 
 import javax.swing.JButton;
@@ -16,8 +15,8 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
-import com.alura.jdbc.controller.CategoriaController;
-import com.alura.jdbc.controller.ProductoController;
+import com.control.stock.controller.CategoriaController;
+import com.control.stock.controller.ProductoController;
 
 public class ControlDeStockFrame extends JFrame {
 

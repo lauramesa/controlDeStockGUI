@@ -1,4 +1,4 @@
-package com.alura.jdbc.view;
+package com.control.stock.view;
 
 import java.awt.Container;
 
@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import com.alura.jdbc.controller.CategoriaController;
+import com.control.stock.controller.CategoriaController;
 
 public class ReporteFrame extends JFrame {
 
