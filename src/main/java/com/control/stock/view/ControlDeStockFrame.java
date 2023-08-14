@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
 import java.util.Optional;
 
 import javax.swing.JButton;
@@ -236,9 +237,11 @@ public class ControlDeStockFrame extends JFrame {
             return;
         }
 
-        // TODO
-        var producto = new Object[] { textoNombre.getText(), textoDescripcion.getText(), cantidadInt };
-        var categoria = comboCategoria.getSelectedItem();
+        // var producto = new Object[] { textoNombre.getText(), textoDescripcion.getText(), cantidadInt };
+        var producto = new HashMap<String, String>();
+        producto.put("NOMBRE", textoNombre.getText());
+        producto.put("descripcion", textoDescripcion.getText());
+        producto.put("CANTIDAD", String.valueOf(cantidadInt));
 
         this.productoController.guardar(producto);
 
