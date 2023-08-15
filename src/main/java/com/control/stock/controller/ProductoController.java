@@ -10,19 +10,46 @@ import java.util.Map;
 
 public class ProductoController {
 
-	public void modificar(String nombre, String descripcion, Integer id) {
-		// TODO
+	public int modificar(String nombre, String descripcion, Integer cantidad, Integer id) throws SQLException {
+		ConnectionFactory factory = new ConnectionFactory();
+		Connection con = factory.recuperaConexion();
+
+		Statement statement = con.createStatement();
+
+		statement.execute("UPDATE PRODUCTO SET "
+				+ " NOMBRE = '" + nombre + "'"
+				+ ", DESCRIPCION = '" + descripcion + "'"
+				+ ", CANTIDAD = " + cantidad
+				+ " WHERE ID = " + id);
+
+		int updateCount = statement.getUpdateCount();
+
+		con.close();
+
+		return updateCount;
 	}
 
-	public void eliminar(Integer id) {
-		// TODO
+	public int eliminar(Integer id) {
+		try {
+			Connection  con = new ConnectionFactory().recuperaConexion();
+
+			Statement statement = con.createStatement();
+
+			statement.execute("DELETE FROM PRODUCTO WHERE ID = " +id);
+
+			return statement.getUpdateCount();
+
+		} catch (SQLException e){
+			throw new RuntimeException(e);
+		}
 	}
 
 	public List<Map<String, String>> listar() {
 
 		ArrayList<Map<String, String>> resultado = null;
 
-		try (Connection con = new ConnectionFactory().recuperaConexion();) {
+		try {
+			Connection con = new ConnectionFactory().recuperaConexion();
 			Statement statement = con.createStatement();
 			statement.execute("SELECT ID, NOMBRE, DESCRIPCION, CANTIDAD FROM PRODUCTO");
 
@@ -50,15 +77,15 @@ public class ProductoController {
 			Connection con = new ConnectionFactory().recuperaConexion();
 
 			Statement statement = con.createStatement();
-			statement.execute("INSERT INTO producto(nombre,descripcion,cantidad)"
+			statement.execute("INSERT INTO PRODUCTO(nombre,descripcion,cantidad)"
 					+"VALUES('" +producto.get("NOMBRE") + "', '"
-					+producto.get("DESCRIPCION") + "', "
-					+producto.get("CANTIDAD") +")", Statement.RETURN_GENERATED_KEYS );
+					+producto.get("DESCRIPCION")+ "', "
+					+producto.get("CANTIDAD")+")", Statement.RETURN_GENERATED_KEYS );
 
 			ResultSet resultSet = statement.getGeneratedKeys();
 
 			while (resultSet.next()){
-				resultSet.getInt(1);
+				System.out.println(String.format("dato ingresado", resultSet.getInt(1)));
 			}
 
 		} catch (SQLException e) {
