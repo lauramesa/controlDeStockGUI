@@ -87,24 +87,42 @@ public class ProductoController {
 
     public void guardar(Map<String,String> producto) {
 		try{
-			Connection con = new ConnectionFactory().recuperaConexion();
+			ConnectionFactory factory = new ConnectionFactory();
+			Connection con = factory.recuperaConexion();
+			//con.setAutoCommit(false); se saca la responsabilidad del jdbc, para concluir la transaccion
+
+			String nombre = producto.get("NOMBRE");
+			String descripcion = producto.get("DESCRIPCION");
+			Integer cantidad = Integer.valueOf(producto.get("CANTIDAD"));
+			Integer maximaCantidad = 50;
 
 			PreparedStatement statement = con.prepareStatement("INSERT INTO PRODUCTO(nombre,descripcion,cantidad)" +
 					"VALUES(?,?,?)", Statement.RETURN_GENERATED_KEYS);
-			statement.setString(1, producto.get("NOMBRE"));
-			statement.setString(2, producto.get("DESCRIPCION"));
-			statement.setInt(3, Integer.parseInt(producto.get("CANTIDAD")));
 
-			statement.execute();
-
-			ResultSet resultSet = statement.getGeneratedKeys();
-
-			while (resultSet.next()){
-				System.out.println(String.format("dato ingresado", resultSet.getInt(1)));
-			}
+			do {
+				/* cada 50 elementos, se crea un nuevo registro
+				* si se crea, un elemento con 74, se crean dos registros  res_1 = 50   res_2 = 24*/
+				int cantidadParaGuardar = Math.min(cantidad, maximaCantidad);
+				ejecutarRegistro(nombre, descripcion, cantidadParaGuardar, statement);
+				cantidad=- maximaCantidad;
+			} while (cantidad>0);
 
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
+		}
+	}
+
+	private static void ejecutarRegistro(String nombre, String descripcion, Integer cantidad, PreparedStatement statement) throws SQLException {
+		statement.setString(1, nombre);
+		statement.setString(2, descripcion);
+		statement.setInt(3, cantidad);
+
+		statement.execute();
+
+		ResultSet resultSet = statement.getGeneratedKeys();
+
+		while (resultSet.next()){
+			System.out.println(String.format("dato ingresado", resultSet.getInt(1)));
 		}
 	}
 
