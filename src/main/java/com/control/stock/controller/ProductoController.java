@@ -89,7 +89,8 @@ public class ProductoController {
 		try{
 			ConnectionFactory factory = new ConnectionFactory();
 			Connection con = factory.recuperaConexion();
-			//con.setAutoCommit(false); se saca la responsabilidad del jdbc, para concluir la transaccion
+			//se saca la responsabilidad del jdbc, para concluir la transaccion
+			con.setAutoCommit(false);
 
 			String nombre = producto.get("NOMBRE");
 			String descripcion = producto.get("DESCRIPCION");
@@ -99,13 +100,18 @@ public class ProductoController {
 			PreparedStatement statement = con.prepareStatement("INSERT INTO PRODUCTO(nombre,descripcion,cantidad)" +
 					"VALUES(?,?,?)", Statement.RETURN_GENERATED_KEYS);
 
-			do {
-				/* cada 50 elementos, se crea un nuevo registro
-				* si se crea, un elemento con 74, se crean dos registros  res_1 = 50   res_2 = 24*/
-				int cantidadParaGuardar = Math.min(cantidad, maximaCantidad);
-				ejecutarRegistro(nombre, descripcion, cantidadParaGuardar, statement);
-				cantidad=- maximaCantidad;
-			} while (cantidad>0);
+			try {
+				do {
+					/* cada 50 elementos, se crea un nuevo registro
+					 * si se crea, un elemento con 74, se crean dos registros  res_1 = 50   res_2 = 24*/
+					int cantidadParaGuardar = Math.min(cantidad, maximaCantidad);
+					ejecutarRegistro(nombre, descripcion, cantidadParaGuardar, statement);
+					cantidad=- maximaCantidad;
+				} while (cantidad>0);
+				con.commit();
+			}catch (Exception e){
+				con.rollback();
+			}
 
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
