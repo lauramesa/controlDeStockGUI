@@ -19,6 +19,7 @@ import javax.swing.table.DefaultTableModel;
 
 import com.control.stock.controller.CategoriaController;
 import com.control.stock.controller.ProductoController;
+import com.control.stock.modelo.Producto;
 
 public class ControlDeStockFrame extends JFrame {
 
@@ -250,10 +251,7 @@ public class ControlDeStockFrame extends JFrame {
         }
 
         // var producto = new Object[] { textoNombre.getText(), textoDescripcion.getText(), cantidadInt };
-        var producto = new HashMap<String, String>();
-        producto.put("NOMBRE", textoNombre.getText());
-        producto.put("DESCRIPCION", textoDescripcion.getText());
-        producto.put("CANTIDAD", String.valueOf(cantidadInt));
+        var producto = new Producto(textoNombre.getText(),textoDescripcion.getText(),cantidadInt);
 
         this.productoController.guardar(producto);
 
