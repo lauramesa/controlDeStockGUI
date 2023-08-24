@@ -4,6 +4,20 @@ public class Producto {
     private Integer id;
     private  String nombre;
     private  String descripcion;
+    private  Integer cantidad;
+
+    public Producto(String nombre, String descripcion, Integer cantidad){
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.cantidad = cantidad;
+    }
+
+    public Producto(Integer id, String nombre, String descripcion, Integer cantidad) {
+        this.id = id;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.cantidad = cantidad;
+    }
 
     public Integer getId() {
         return id;
@@ -34,14 +48,6 @@ public class Producto {
     }
 
     public void setCantidad(Integer cantidad) {
-        this.cantidad = cantidad;
-    }
-
-    private  Integer cantidad;
-
-    public Producto(String nombre, String descripcion, Integer cantidad){
-        this.nombre = nombre;
-        this.descripcion = descripcion;
         this.cantidad = cantidad;
     }
 

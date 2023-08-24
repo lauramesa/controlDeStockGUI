@@ -2,6 +2,7 @@ package com.control.stock.controller;
 
 import com.control.stock.factory.ConnectionFactory;
 import com.control.stock.modelo.Producto;
+import com.control.stock.persistencia.ProductoDAO;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,6 +11,16 @@ import java.util.List;
 import java.util.Map;
 
 public class ProductoController {
+
+	private ProductoDAO productoDAO;
+
+	public ProductoController() {
+		this.productoDAO = new ProductoDAO(new ConnectionFactory().recuperaConexion());
+	}
+	public ProductoController(ProductoDAO productoDAO) {
+		this.productoDAO = new ProductoDAO(new ConnectionFactory().recuperaConexion());
+	}
+
 
 	public int modificar(String nombre, String descripcion, Integer cantidad, Integer id) throws SQLException {
 		ConnectionFactory factory = new ConnectionFactory();
@@ -53,75 +64,12 @@ public class ProductoController {
 		}
 	}
 
-	public List<Map<String, String>> listar() {
-
-		List<Map<String, String>> resultado = new ArrayList<>();
-
-		try {
-			ConnectionFactory factory = new ConnectionFactory();
-			Connection con = factory.recuperaConexion();
-
-			PreparedStatement statement = con
-					.prepareStatement("SELECT ID, NOMBRE, DESCRIPCION, CANTIDAD FROM PRODUCTO");
-			statement.execute();
-
-			ResultSet resultSet = statement.getResultSet();
-
-
-
-			while (resultSet.next()) {
-				Map<String, String> fila = new HashMap<>();
-				fila.put("ID", String.valueOf(resultSet.getInt("ID")));
-				fila.put("NOMBRE", resultSet.getString("NOMBRE"));
-				fila.put("DESCRIPCION", resultSet.getString("DESCRIPCION"));
-				fila.put("CANTIDAD", String.valueOf(resultSet.getInt("CANTIDAD")));
-
-				resultado.add(fila);
-			}
-
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
-		// return new ArrayList<>();
-		return resultado;
+	public List<Producto> listar() {
+		return productoDAO.listar();
 	}
 
-    public void guardar(Producto producto) throws SQLException{
-		try {
-			ConnectionFactory factory = new ConnectionFactory();
-			Connection con = factory.recuperaConexion();
-			//se saca la responsabilidad del jdbc, para concluir la transaccion
-			con.setAutoCommit(false);
-			PreparedStatement statement = con.prepareStatement("INSERT INTO PRODUCTO(nombre,descripcion,cantidad)" +
-					"VALUES(?,?,?)", Statement.RETURN_GENERATED_KEYS);
-
-			try (statement){
-				ejecutarRegistro(producto, statement);
-				con.commit();
-			}catch (Exception e){
-				con.rollback();
-			}
-
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
+    public void guardar(Producto producto) {
+		//ProductoDAO persistenciaproducto = new ProductoDAO(new ConnectionFactory().recuperaConexion());
+		productoDAO.guardarProducto(producto);
 	}
-
-	private static void ejecutarRegistro(Producto producto, PreparedStatement statement) throws SQLException {
-		statement.setString(1, producto.getNombre());
-		statement.setString(2, producto.getDescripcion());
-		statement.setInt(3, producto.getCantidad());
-
-		statement.execute();
-
-		ResultSet resultSet = statement.getGeneratedKeys();
-
-		try (resultSet){
-			while (resultSet.next()){
-				producto.setId(resultSet.getInt(1));
-				System.out.println(String.format("dato ingresado %s", producto));
-			}
-		}
-	}
-
 }
