@@ -18,8 +18,8 @@ public class ProductoDAO {
         try {
             //se saca la responsabilidad del jdbc, para concluir la transaccion
             CON.setAutoCommit(false);
-            PreparedStatement statement = CON.prepareStatement("INSERT INTO PRODUCTO(nombre,descripcion,cantidad)" +
-                    "VALUES(?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement statement = CON.prepareStatement("INSERT INTO PRODUCTO(nombre,descripcion,cantidad,cantidad)" +
+                    "VALUES(?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
 
             try (statement){
                 ejecutarRegistro(producto, statement);
@@ -37,6 +37,7 @@ public class ProductoDAO {
         statement.setString(1, producto.getNombre());
         statement.setString(2, producto.getDescripcion());
         statement.setInt(3, producto.getCantidad());
+        statement.setInt(4, producto.getCategoriaid());
 
         statement.execute();
 

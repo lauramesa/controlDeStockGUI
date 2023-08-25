@@ -5,6 +5,7 @@ public class Producto {
     private  String nombre;
     private  String descripcion;
     private  Integer cantidad;
+    private Integer categoriaid;
 
     public Producto(String nombre, String descripcion, Integer cantidad){
         this.nombre = nombre;
@@ -49,6 +50,12 @@ public class Producto {
 
     public void setCantidad(Integer cantidad) {
         this.cantidad = cantidad;
+    }
+    public int getCategoriaid() {
+        return this.categoriaid;
+    }
+    public void setCategoriaid(Integer categoriaid) {
+        this.categoriaid = categoriaid;
     }
 
     @Override
