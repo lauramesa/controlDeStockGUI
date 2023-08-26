@@ -52,7 +52,8 @@ public class ReporteFrame extends JFrame {
         contenido.forEach(categoria-> {
             modelo.addRow(new Object[]{categoria});
 
-            var productos = this.productoController.listar(categoria);
+            //var productos = this.productoController.listar(categoria);
+            var productos = categoria.getProductos();
 
             productos.forEach(producto -> modelo.addRow(
                     new Object[]{
