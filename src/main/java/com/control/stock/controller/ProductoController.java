@@ -1,6 +1,7 @@
 package com.control.stock.controller;
 
 import com.control.stock.factory.ConnectionFactory;
+import com.control.stock.modelo.Categoria;
 import com.control.stock.modelo.Producto;
 import com.control.stock.persistencia.ProductoDAO;
 
@@ -66,6 +67,10 @@ public class ProductoController {
 
 	public List<Producto> listar() {
 		return productoDAO.listar();
+	}
+
+	public List<Producto> listar(Categoria categoria) {
+		return productoDAO.listar(categoria.getId());
 	}
 
     public void guardar(Producto producto, Integer categoriaid) {
